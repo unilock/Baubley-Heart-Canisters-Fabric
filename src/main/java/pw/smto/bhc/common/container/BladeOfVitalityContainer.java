@@ -128,7 +128,7 @@ public class BladeOfVitalityContainer extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return true;
+        return InventoryUtil.hasItem(player, Registry.Items.BLADE_OF_VITALITY);
     }
 
 
