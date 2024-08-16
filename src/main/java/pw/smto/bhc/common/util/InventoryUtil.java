@@ -43,8 +43,8 @@ public class InventoryUtil {
     public static boolean hasAmulet(PlayerEntity player) {
         for (int i = 0; player.getInventory().size() > i; ++i) {
             ItemStack stack = player.getInventory().getStack(i);
-            if(stack.getItem() != Registry.Items.HEART_AMULET) continue;
+            if(stack.isOf(Registry.Items.HEART_AMULET)) return true;
         }
-        return true;
+        return false;
     }
 }
