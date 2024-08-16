@@ -47,4 +47,12 @@ public class InventoryUtil {
         }
         return false;
     }
+
+    public static boolean hasSoulAmulet(PlayerEntity player) {
+        for (int i = 0; player.getInventory().size() > i; ++i) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if(stack.isOf(Registry.Items.SOUL_HEART_AMULET)) return true;
+        }
+        return false;
+    }
 }

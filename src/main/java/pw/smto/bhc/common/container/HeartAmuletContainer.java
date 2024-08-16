@@ -138,12 +138,7 @@ public class HeartAmuletContainer extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        if(InventoryUtil.hasAmulet(player)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return InventoryUtil.hasAmulet(player);
     }
 /*
     @Override
