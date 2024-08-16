@@ -3,8 +3,11 @@ package pw.smto.bhc.common;
 import io.wispforest.owo.registration.reflect.AutoRegistryContainer;
 import io.wispforest.owo.registration.reflect.FieldRegistrationHandler;
 import io.wispforest.owo.registration.reflect.ItemRegistryContainer;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
-import net.fabricmc.fabric.impl.itemgroup.FabricItemGroupBuilderImpl;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
@@ -64,7 +67,7 @@ public class Registry {
         public static final Item BLADE_OF_VITALITY = new ItemBladeOfVitality();
 
         public static final Item WITHER_BONE = new BaseItem();
-        public static final Item RELIC_APPLE = new ItemRelicApple();
+        public static final Item RELIC_APPLE = new Item(new Item.Settings().food(new FoodComponent.Builder().hunger(20).saturationModifier(0.8F).alwaysEdible().statusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 60, 1), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 20 * 60, 1), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.HASTE, 20 * 60, 1), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.INSTANT_HEALTH, 1, 2), 1.0F).build()));
         @ItemGroupIcon
         public static final Item HEART_AMULET = new ItemHeartAmulet();
         public static final Item SOUL_HEART_AMULET = new ItemSoulHeartAmulet();
@@ -117,7 +120,7 @@ public class Registry {
         FieldRegistrationHandler.register(ScreenHandlers.class, MOD_ID, false);
         FieldRegistrationHandler.register(RecipeSerializers.class, MOD_ID, false);
 
-        var tabBuilder = new FabricItemGroupBuilderImpl();
+        var tabBuilder = FabricItemGroup.builder();
         tabBuilder.displayName(Text.translatable("itemGroup.bhcTab"));
         tabBuilder.icon(() -> ITEM_GROUP_ICON);
         tabBuilder.entries((displayContext, entries) -> {
