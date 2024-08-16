@@ -105,7 +105,7 @@ public class SoulHeartAmuletContainer extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return InventoryUtil.hasSoulAmulet(player);
+        return InventoryUtil.hasItem(player, Registry.Items.SOUL_HEART_AMULET);
     }
 
     /*

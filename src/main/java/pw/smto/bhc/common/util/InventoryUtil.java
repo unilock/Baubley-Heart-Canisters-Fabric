@@ -2,12 +2,12 @@ package pw.smto.bhc.common.util;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import pw.smto.bhc.common.BaubleyHeartCanisters;
-import pw.smto.bhc.common.Registry;
 
 public class InventoryUtil {
 
@@ -40,18 +40,10 @@ public class InventoryUtil {
         stack.setNbt(nbt);
     }
 
-    public static boolean hasAmulet(PlayerEntity player) {
+    public static boolean hasItem(PlayerEntity player, Item item) {
         for (int i = 0; player.getInventory().size() > i; ++i) {
             ItemStack stack = player.getInventory().getStack(i);
-            if(stack.isOf(Registry.Items.HEART_AMULET)) return true;
-        }
-        return false;
-    }
-
-    public static boolean hasSoulAmulet(PlayerEntity player) {
-        for (int i = 0; player.getInventory().size() > i; ++i) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if(stack.isOf(Registry.Items.SOUL_HEART_AMULET)) return true;
+            if(stack.isOf(item)) return true;
         }
         return false;
     }
