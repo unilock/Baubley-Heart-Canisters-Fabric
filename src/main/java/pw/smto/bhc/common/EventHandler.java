@@ -2,8 +2,9 @@ package pw.smto.bhc.common;
 
 import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -13,11 +14,12 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
 import pw.smto.bhc.common.config.ConfigHandler;
 import pw.smto.bhc.common.items.ItemSoulHeartAmulet;
 import pw.smto.bhc.common.util.DropHandler;
@@ -27,23 +29,22 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class EventHandler {
     public static void init() {
-        ServerEntityEvents.ENTITY_LOAD.register(EventHandler::setStartingHealth);
-        ServerEntityEvents.ENTITY_UNLOAD.register(EventHandler::onItemDrop);
+        ServerPlayerEvents.AFTER_RESPAWN.register(EventHandler::setStartingHealth);
+        ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(EventHandler::onItemDrop);
         ServerLivingEntityEvents.ALLOW_DEATH.register(EventHandler::onPlayerDeathEvent);
     }
 
-    public static void setStartingHealth(Entity entity, World world) {
-        if(ConfigHandler.server.allowStartingHeathTweaks.get() && entity instanceof PlayerEntity player && !(entity instanceof FakePlayer)) {
+    public static void setStartingHealth(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer, boolean alive) {
+        if(ConfigHandler.server.allowStartingHeathTweaks.get() && !(newPlayer instanceof FakePlayer)) {
             if(ConfigHandler.server.startingHealth.get() > 0) {
-                player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(ConfigHandler.server.startingHealth.get());
+                newPlayer.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(ConfigHandler.server.startingHealth.get());
             }
         }
     }
 
-    public static void onItemDrop(Entity entity, World world) {
-        var player = world.getClosestPlayer(entity,20);
-        if (player != null) {
-            DropHandler.onEntityDrop(entity,player,world);
+    public static void onItemDrop(ServerWorld world, Entity entity, LivingEntity killedEntity) {
+        if (entity instanceof PlayerEntity player) {
+            DropHandler.onEntityDrop(killedEntity,player,world);
         }
     }
 
