@@ -1,6 +1,5 @@
 package pw.smto.bhc.common.items;
 
-import net.minecraft.item.ItemStack;
 import pw.smto.bhc.common.config.ConfigHandler;
 import pw.smto.bhc.common.util.HeartType;
 

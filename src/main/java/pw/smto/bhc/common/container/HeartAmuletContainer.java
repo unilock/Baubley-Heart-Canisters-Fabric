@@ -6,11 +6,8 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
-
-import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
 import pw.smto.bhc.common.Registry;
 import pw.smto.bhc.common.config.ConfigHandler;

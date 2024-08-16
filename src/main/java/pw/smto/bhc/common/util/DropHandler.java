@@ -2,9 +2,7 @@ package pw.smto.bhc.common.util;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.mob.HostileEntity;
@@ -16,7 +14,6 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.world.World;
 import pw.smto.bhc.common.BaubleyHeartCanisters;
 import pw.smto.bhc.common.Registry;
@@ -131,6 +128,7 @@ public class DropHandler {
     private static boolean isBoss(Entity entity) {
         if(entity != null) {
             // Fabric has no boss entity type tag, so lets hardcode it for now
+            // ...yes it does: "#c:bosses"
             return entity instanceof WardenEntity || entity instanceof WitherEntity;
         }
         return false;
