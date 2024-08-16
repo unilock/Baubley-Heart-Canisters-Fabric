@@ -4,7 +4,7 @@ import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -14,12 +14,12 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.world.World;
 import pw.smto.bhc.common.config.ConfigHandler;
 import pw.smto.bhc.common.items.ItemSoulHeartAmulet;
 import pw.smto.bhc.common.util.DropHandler;
@@ -29,15 +29,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class EventHandler {
     public static void init() {
-        ServerPlayerEvents.AFTER_RESPAWN.register(EventHandler::setStartingHealth);
+        ServerEntityEvents.ENTITY_LOAD.register(EventHandler::setStartingHealth);
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(EventHandler::onItemDrop);
         ServerLivingEntityEvents.ALLOW_DEATH.register(EventHandler::onPlayerDeathEvent);
     }
 
-    public static void setStartingHealth(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer, boolean alive) {
-        if(ConfigHandler.server.allowStartingHeathTweaks.get() && !(newPlayer instanceof FakePlayer)) {
+    public static void setStartingHealth(Entity entity, World world) {
+        if(ConfigHandler.server.allowStartingHeathTweaks.get() && entity instanceof PlayerEntity player && !(player instanceof FakePlayer)) {
             if(ConfigHandler.server.startingHealth.get() > 0) {
-                newPlayer.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(ConfigHandler.server.startingHealth.get());
+                player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(ConfigHandler.server.startingHealth.get());
             }
         }
     }
